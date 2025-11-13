@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitHub - CO - Entrar</title>
+  <link rel="stylesheet" href="/src/CSS/Reseñas.css">
+  <link rel="icon" href="/src/VIEWS/IMG/logos/Favicon_64x64.png" type="image/png">
+</head>
+
+<body>
+  <header>
+    <a href="/index.html"><img class="imageicon"  src="/src/VIEWS/IMG/logos/LogoFinal.png" alt="Logo Img"  /></a>
+
+    <nav class="nav-main">
+      <ul class="nav-links">
+        <li><a href="/src/VIEWS/sedes.html" class="Pet1">Sedes</a></li>
+        <li><a href="/src/VIEWS/promociones.html" class="Pet1">Promociones</a></li>
+        <li><a href="/src/VIEWS/quiens.html" class="Pet1">Quienes somos</a></li>
+        <li><button class="btn-inscribete" onclick="location.href='/src/VIEWS/registra.html'">¡Inscríbete!</button></li>
+        <li>
+          <aside class="menu-container">
+            <input type="checkbox" id="menu-toggle" />
+            <!-- Fondo oscuro -->
+            <label class="menu-overlay" for="menu-toggle"></label>
+            <label class="menu-icon" for="menu-toggle">
+              <span class="bar1"></span>
+              <span class="bar2"></span>
+              <span class="bar3"></span>
+            </label>
+            <nav class="menu">
+              <label class="close-button" for="menu-toggle">X</label>
+              <img src="/src/VIEWS/IMG/logos/LogoFinal.png" alt="">
+
+              <div class="ImgUser">
+                <img src="/src/VIEWS/IMG/logos/Usuario.png" alt="User">
+                <a id="User" href="/src/VIEWS/login.html">usuarios</a>
+                <a id="number" href="/src/VIEWS/login.html">  <span style="color: #868686;">1.152.224.905</span></a>
+              </div>
+
+              <a href="/src/VIEWS/sedes.html">Sedes</a>
+              <a href="/src/VIEWS/promociones.html">Promociones</a>
+              <a href="/src/VIEWS/quiens.html">Quienes Somos</a>
+              <a href="/src/VIEWS/entrenadores.html">Entrenadores</a>
+              <button onclick="location.href='/src/VIEWS/registra.html'" >¡Inscríbete!</button>
+            </nav>
+          </aside>
+        </li>
+      </ul>
+    </nav>
+  </header>
+<!-- ///////////////////////////////////////////////////Content///////////////////////////////////////////////////-->
+ <div class="main-layout">
+    <!-- Formulario de reseña -->
+    <div class="review-form-section">
+      <h1>Reseñas de Nuestros Clientes</h1>
+      <div class="average-rating">
+        <span>Promedio: <strong>5.0 / 5.0</strong></span>
+        <span class="stars">★ ★ ★ ★ ☆</span>
+      </div>
+
+      <form class="review-form">
+        <label for="name">Tu nombre</label>
+        <input type="text" id="name" name="name" placeholder="Escribe tu nombre..." required />
+
+        <label for="opinion">Escribe tu opinión...</label>
+        <textarea id="opinion" name="opinion" rows="4" placeholder="Tu comentario aquí..." required></textarea>
+
+        <label>Calificación:</label>
+        <div class="star-rating">
+          <input type="radio" name="rating" id="star5" value="5" /><label for="star5">★</label>
+          <input type="radio" name="rating" id="star4" value="4" /><label for="star4">★</label>
+          <input type="radio" name="rating" id="star3" value="3" /><label for="star3">★</label>
+          <input type="radio" name="rating" id="star2" value="2" /><label for="star2">★</label>
+          <input type="radio" name="rating" id="star1" value="1" /><label for="star1">★</label>
+        </div>
+
+        <div class="buttons">
+          <label for="photo-upload" class="photo-btn">📷 Subir foto (opcional)</label>
+          <input type="file" id="photo-upload" name="photo" accept="image/*" hidden />
+          <button type="submit" class="submit-btn">Enviar reseña</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sección de comentarios -->
+    <div class="review-display-section">
+      <h2>Comentarios Recientes</h2>
+      <div class="reviews-list"></div>
+    </div>
+  </div>
+
+<script>
+    const form = document.querySelector('.review-form');
+    const reviewsContainer = document.querySelector('.reviews-list');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const opinion = form.opinion.value.trim();
+      const rating = form.rating.value;
+      const photo = form.photo.files[0];
+
+      if (!name || !opinion || !rating) return;
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const review = {
+          name,
+          opinion,
+          rating,
+          photo: photo ? reader.result : null,
+          date: new Date().toLocaleDateString()
+        };
+
+        const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+        reviews.push(review);
+        localStorage.setItem('reviews', JSON.stringify(reviews));
+
+        renderReview(review);
+        updateAverageRating();
+        form.reset();
+      };
+
+      if (photo) {
+        reader.readAsDataURL(photo);
+      } else {
+        reader.onload();
+      }
+    });
+
+    function renderReview({ name, opinion, rating, photo, date }) {
+      const reviewEl = document.createElement('div');
+      reviewEl.className = 'review-item';
+
+      reviewEl.innerHTML = `
+        <div class="review-header">
+          ${photo ? `<img src="${photo}" alt="Foto" class="review-avatar" />` : ''}
+          <h3>${name} <span class="review-date">${date}</span></h3>
+          <button class="delete-btn">✖</button>
+        </div>
+        <div class="review-stars">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
+        <p>${opinion}</p>
+      `;
+
+      reviewEl.querySelector('.delete-btn').addEventListener('click', () => {
+        reviewEl.remove();
+        const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+        const updated = reviews.filter(r => !(r.name === name && r.opinion === opinion && r.date === date));
+        localStorage.setItem('reviews', JSON.stringify(updated));
+        updateAverageRating();
+      });
+
+      reviewsContainer.prepend(reviewEl);
+    }
+
+    function updateAverageRating() {
+      const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+      if (reviews.length === 0) return;
+
+      const total = reviews.reduce((sum, r) => sum + parseInt(r.rating), 0);
+      const average = (total / reviews.length).toFixed(1);
+
+      document.querySelector('.average-rating strong').textContent = `${average} / 5.0`;
+      document.querySelector('.stars').textContent = '★'.repeat(Math.round(average)) + '☆'.repeat(5 - Math.round(average));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+      savedReviews.forEach(renderReview);
+      updateAverageRating();
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ///////////////////////////////////////////////////Content///////////////////////////////////////////////////
+ -->
+  <footer>
+    <img class="logo-principal"src="/src/VIEWS/IMG/logos/LogoFinalInvertido.png" alt="">
+    <hr class="linea">
+    <p>Siguenos</p>
+
+    <nav class="social-icons">
+    <a href="https://www.facebook.com/SmartFitOficialColombia/" target="_blank"><img class="icons"src="/src/VIEWS/IMG/logos/Logo-Facebook.png" alt="Facebook" style="width:30px; height:30px;"></a>
+    <a href="https://www.instagram.com/smartfit/" target="_blank"><img class="icons"src="/src/VIEWS/IMG/logos/Logo-Instagram.png" alt="Instagram" style="width:30px; height:30px;"></a>
+    <a href="https://www.smartfit.com.co/" target="_blank"><img class="icons"src="/src/VIEWS/IMG/logos/Logo-X.png" alt="X" style="width:30px; height:30px;"></a>
+    <a href="https://www.youtube.com/smartfit" target="_blank"><img class="icons"src="/src/VIEWS/IMG/logos/Logo-Youtube.png" alt="yOUTUBE" style="width:30px; height:30px;"></a>
+    <a href="https://www.tiktok.com/@smartfit" target="_blank"><img class="icons"src="/src/VIEWS/IMG/logos/Logo-TikTok.png" alt="Tiktok" style="width:30px; height:30px;"></a>
+    </nav>
+    
+    <hr class="linea">
+
+    <!-- Aquí agregamos los links típicos de footer -->
+    <nav class="footer-links" aria-label="Enlaces de navegación del pie de página">
+        <a href="/src/VIEWS/quiens.html">Quiénes somos</a>
+        <a href="/src/VIEWS/promociones.html">Promociones</a>
+        <a href="#">Planes</a>
+        <a href="#">Contacto</a>
+        <a href="#">Preguntas frecuentes</a>
+        <a href="/src/VIEWS/terminos.html">Términos y condiciones</a>
+        <a href="#">Contáctenos (PQRS)</a>
+        <a href="#">Acceso a Proveedores</a>
+        <a href="#">Políticas corporativas</a>
+        <a href="#">Línea ética</a>
+    </nav>
+
+</footer>
+
+
+
+
+  <script src="/src/JS/index.js"></script>
+
+
+
+</body>
+
+</html>

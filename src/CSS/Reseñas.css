@@ -410,27 +410,26 @@ color:#3061ff ;
 //////////////////////////////////////////////////////////////// 🗿 End Of Header🗿 ///////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
-/* styles.css */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 2rem;
+
+.main-layout {
   display: flex;
-  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
 }
 
-.review-container {
+.review-form-section,
+.review-display-section {
   background-color: #fff;
   padding: 2rem;
-  border-radius: 12px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  flex: 1;
 }
 
-h1 {
-  font-size: 1.8rem;
+.review-form-section {
+  max-width: 500px;
+}
+
+.review-display-section h2 {
   margin-bottom: 1rem;
   color: #333;
 }
@@ -487,7 +486,7 @@ h1 {
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-  color: #000;
+  color: #3061ff;
 }
 
 .buttons {
@@ -521,21 +520,22 @@ h1 {
 }
 
 .reviews-list {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
+
+
 
 .review-item {
   background-color: #f4f4f4;
   padding: 1rem;
-  border-radius: 8px;
   margin-bottom: 1rem;
 }
 
-.review-stars {
-  color: #000;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+.review-stars,
+.star-rating label {
+  color: #284fce ;
 }
+
 
 .review-photo {
   max-width: 100%;
@@ -550,30 +550,42 @@ h1 {
 }
 
 
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
 
+.review-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
 
+.review-header h3 {
+  flex-grow: 1;
+  font-size: 1rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.delete-btn:hover {
+  color: #ff4d4d;
+}
 
 
 
@@ -684,86 +696,3 @@ footer .footer-links a:hover {
 ////////////////////////////////////////////////////////////////🔧 End Of Footer🔧 ///////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 */
-
-
-
-
-
-
-
-/* Media query for smaller screens */
-@media (max-width: 768px) {
-    .img_incio {
-        width: 95%; /* Slightly more width on smaller screens */
-        margin-top: 15px;
-        margin-bottom: 15px;
-        min-height: 200px; /* Adjust minimum height for smaller screens */
-    }
-}
-
-/* Media query for very small screens (e.g., mobile phones) */
-@media (max-width: 480px) {
-    .img_incio {
-        border-radius: 10px; /* Slightly less rounded corners */
-        min-height: 150px; /* Further adjust minimum height */
-    }
-}
-
-/* Tablet screens */
-@media (max-width: 1024px) {
-  .imageicon {
-    top: -40px;
-    left: 5px;
-    width: 200px;
-  }
-}
-
-/* Mobile screens */
-@media (max-width: 600px) {
-  .imageicon {
-    top: -30px;
-    left: 0;
-    width: 150px;
-  }
-}
-
-@media (max-width: 797px){
-  .Pet1 {
-    display: none;
-  }
-
-  .opciones input[type="checkbox"] {
-  display: none;
-}
-
-.opciones{
-  display: none;
-}
-
-.btn-inscribete{
-  font-size: 18px;
-  border-radius: 38px;
-  border: none;
-  padding: 10px 78px;
-  background-color: #3061ff;
-  color: rgb(0, 0, 0);
-  font-weight: 400px;
-  cursor: pointer;
-}
-
-.menu-icon {
-  width: 40px;
-  height: 28px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  z-index: 1101;
-}
-}
-
-@media (max-width: 1381px) and (min-width: 1223px) {
-  .imageicon {
-display: none;
-  }
-}
